@@ -1,13 +1,13 @@
-alert("Welcome to the Access Gate");
+// alert("Welcome to the Access Gate");
 let flagMenu = false;
-let userInfo = {
-    name: "",
-    age: 0,
-    role: "",
-    hours: 0,
-    acceptance: false,
-    risk:0,
-};
+// let userInfo = {
+//     name: "",
+//     age: 0,
+//     role: "",
+//     hours: 0,
+//     acceptance: false,
+//     risk:0,
+// };
 
 function menu(){
     const option = intValidation(`Choose an option \n1. Check-in \n2. Risk Calculator \n3. Access Validation \n4. Exit`,1,4);
@@ -52,8 +52,6 @@ function strValidation(message){
         let value = prompt(message, "Type here");
         if (value === null) return null;
 
-        // value = value.trim();
-
         if (value === "") {
             alert("The field cannot be empty");
             continue;
@@ -97,17 +95,17 @@ function register() {
 
 function riskCalculation(user) {
     let risk = 0;
-    if (user.hours < 2) {
+    if (user.inputHours < 2) {
         risk+=2;
-    } else if (user.hours > 3){
+    } else if (user.inputHours > 3){
         risk--;
     }
-    if (user.role == 'visitor') {
+    if (user.inputRole == 'visitor') {
         risk+=2;
-    } else if (user.role == 'coder'){
+    } else if (user.inputRole == 'coder'){
         risk--;
     }
-    if (user.age>17 && user.age < 21) {
+    if (user.inputAge>17 && user.inputAge < 21) {
         risk+=2;
     }
 
@@ -115,7 +113,7 @@ function riskCalculation(user) {
         risk = 0
     }
     user.risk = risk;
-    return risk;
+    return user;
 }
 
 function showUser(user){
@@ -132,8 +130,17 @@ function finalDecision(user) {
         decision = 'Access under review';
     }
     console.log(`Dear ${user.name} \n${decision}`);
-    alert(`Dear ${user.name} \n${decision}`);
-    return
+    //alert(`Dear ${user.name} \n${decision}`);
+    return decision
+}
+
+function showDecision(finalDes) {
+    const output = document.querySelector('section');
+
+    const newContent = document.createTextNode(finalDes);
+
+    output.appendChild(newContent)
+
 }
 
 function main(value){
@@ -159,17 +166,42 @@ function main(value){
     }
 }
 
-while (!flagMenu) {
-    let option = menu();
+// while (!flagMenu) {
+//     let option = menu();
 
-    if (option === 4) {
-        flagMenu = true;
-        alert("Thanks for using the System");
+//     if (option === 4) {
+//         flagMenu = true;
+//         alert("Thanks for using the System");
 
-    } else {
-        flagMenu = false;
-        main(option);
+//     } else {
+//         flagMenu = false;
+//         main(option);
+//     }
+// }
+
+const btn = document.getElementById('btn-submit');
+
+const form = document.querySelector("form");
+
+function saveUser(e){
+    const formData = new FormData(e.target);
+    
+    const user = {};
+    for (const [key, value] of formData) {
+        user[key] = value;
     }
+
+    user.rulesCheck = user.rulesCheck ? true:false;
+    
+    return user
+
 }
 
-
+form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    userInfo = saveUser(e)
+    riskCalculation(userInfo)
+    console.log(riskCalculation(userInfo))
+    showDecision(finalDecision(riskCalculation(userInfo)))
+}
+)
