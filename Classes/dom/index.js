@@ -26,6 +26,10 @@ cards.forEach(card =>{
 // })
 
 
+//LocalStorage y SessionStorage
+//Sweetalert2
+//material ui vulma shadcn foundation
+
 const films = [
     {
         name:'Friends',

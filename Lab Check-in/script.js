@@ -6,10 +6,11 @@ let userInfo = {
     role: "",
     hours: 0,
     acceptance: false,
+    risk:0,
 };
 
 function menu(){
-    const option = intValidation(`Choose an option \n1. Check-in \n2. Risk Calculator \n3. Simulation \n4. Exit`,1,4);
+    const option = intValidation(`Choose an option \n1. Check-in \n2. Risk Calculator \n3. Access Validation \n4. Exit`,1,4);
     return option
 }
 
@@ -93,9 +94,6 @@ function register() {
     };
     return  userInfo
 }
-//LocalStorage y SessionStorage
-//Sweetalert2
-//material ui vulma shadcn foundation
 
 function riskCalculation(user) {
     let risk = 0;
@@ -116,7 +114,7 @@ function riskCalculation(user) {
     if (risk < 0) {
         risk = 0
     }
-
+    user.risk = risk;
     return risk;
 }
 
@@ -126,33 +124,16 @@ function showUser(user){
 }
 
 function finalDecision(user) {
-    let decision = 'Allow'
+    let decision = 'Access Granted. Welcome!';
     if (user.age < 19 || user.acceptance === false) {
-        decision = 'Deny'
+        decision = 'Access Denied';
     }
-    if (user.risk < 3){
-        decision = 'Review'
+    else if (user.risk > 3){
+        decision = 'Access under review';
     }
-
-    let sumNotes = 0, prom = 0, notes = [];
-    notes[0]  = intValidation("Enter note 1", 0,5);
-    notes[1]  = intValidation("Enter note 2", 0,5);
-    notes[2]  = intValidation("Enter note 3", 0,5);
-    let msg = 'Congratulations, you approbed';
-
-    for(let i of notes) sumNotes += i;
-    prom = sumNotes/3;
-    prom = prom.toFixed(2);
-
-    if (prom < 3) {
-        msg = "Unfortunately you failed"
-    } else if (prom > 4.5){
-        msg = 'Congratulations, you approbed with excellence';
-    }
-
-    alert(`Your final note is: ${prom} \n${msg}`);
+    console.log(`Dear ${user.name} \n${decision}`);
+    alert(`Dear ${user.name} \n${decision}`);
     return
-    
 }
 
 function main(value){
@@ -160,15 +141,17 @@ function main(value){
         case 1:
             userInfo = register();
             alert("Check-in in process");
+            console.log(userInfo)
             showUser(userInfo);
             break;
 
         case 2:
             let userRisk = riskCalculation(userInfo);
-            console.log(userRisk)
+            console.log(`Your risk score is: ${userRisk}`)
+            alert(`Your risk score is: ${userRisk}`)
             break;
         case 3:
-            evaluation();
+            finalDecision(userInfo);
             break;
     
         default:
@@ -190,38 +173,3 @@ while (!flagMenu) {
 }
 
 
-// ex 1
-
-// const header1 = document.querySelector('h1');
-
-// const name = prompt('name');
-
-// header1.textContent = 'Hello ' + name
-
-//ex 2
-
-// const inputName = document.querySelector('input')
-
-// function change() {
-//     header1.textContent = 'Hello ' + inputName.value
-// }
-
-//ex 3 PERSISTENCIA DE DATOS
-// document.addEventListener('DOMContentLoaded',() =>{
-//     const nameSave = localStorage.getItem('name')
-//     header1.textContent = 'Hello ' + nameSave
-    
-// }
-// )
-// const inputName = document.querySelector('input')
-
-// function change() {
-    
-//     header1.textContent = 'Hello ' + inputName.value
-//     localStorage.setItem('name',inputName.value)
-// }
-
-//ex 4 Cambio estilos
-
-document.body.style.background = 'black';
-document.body.style = 'background:red; color:white'
